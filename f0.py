@@ -1,12 +1,16 @@
-plant(Entities.Bush)
-move(South)
-plant(Entities.Bush)
-move(South)
-plant(Entities.Bush)
+# 3×3农场灌木
 
-# 收获-重种
+for i in range(get_world_size()):
+    for j in range(get_world_size()):
+        plant(Entities.Bush)
+        move(North)
+    move(East)
+
 while True:
-	move(South)
-	if can_harvest():
-		harvest()
-		plant(Entities.Bush)
+    for i in range(get_world_size()):
+        for j in range(get_world_size()):
+            if can_harvest():
+                harvest()
+                plant(Entities.Bush)
+            move(North)
+        move(East)
