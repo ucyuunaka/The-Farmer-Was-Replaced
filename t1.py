@@ -1,5 +1,5 @@
-# t1.py - 修改版，记录产量
-set_world_size(8)  # 直接设置为8x8测试
+# t1.py - 简化修复版
+set_world_size(12)
 
 # 初始种植
 for _ in range(get_world_size()):
@@ -11,9 +11,9 @@ for _ in range(get_world_size()):
 
 harvest_count = 0
 max_runs = 10
-total_pumpkins = 0
 
 while harvest_count < max_runs:
+	# 简单扫描枯萎
 	for _ in range(get_world_size()):
 		for _ in range(get_world_size()):
 			if get_entity_type() == Entities.Dead_Pumpkin:
@@ -21,20 +21,19 @@ while harvest_count < max_runs:
 			move(North)
 		move(East)
 	
+	# 简单检查收获
 	if can_harvest():
-		initial = num_items(Items.Pumpkin)
 		harvest()
-		gained = num_items(Items.Pumpkin) - initial
-		total_pumpkins = total_pumpkins + gained
 		harvest_count = harvest_count + 1
-		quick_print("第" + str(harvest_count) + "次收获: " + str(gained) + "个南瓜")
+		quick_print("第" + str(harvest_count) + "次收获")
 		
+		# 重新种植
 		for _ in range(get_world_size()):
 			for _ in range(get_world_size()):
-				till()
+				if get_ground_type() != Grounds.Soil:
+					till()
 				plant(Entities.Pumpkin)
 				move(North)
 			move(East)
 
-quick_print("总产量: " + str(total_pumpkins))
 quick_print("总收获次数: " + str(harvest_count))
