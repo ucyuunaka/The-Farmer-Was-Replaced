@@ -1,5 +1,7 @@
-# t2.py - 添加停止条件
-
+# t2.py - 修改版，记录产量
+if "world_size" in dir():
+	set_world_size(world_size)
+	
 def plant_column():
 	for _ in range(get_world_size()):
 		till()
@@ -17,9 +19,9 @@ for _ in range(get_world_size()):
 	spawn_drone(plant_column)
 	move(East)
 
-# 主循环
 harvest_count = 0
-max_runs = 5
+max_runs = 10
+total_pumpkins = 0
 
 while harvest_count < max_runs:
 	# 并行检查枯萎
@@ -27,13 +29,18 @@ while harvest_count < max_runs:
 		spawn_drone(check_dead_column)
 		move(East)
 	
-	# 检查收获
 	if can_harvest():
+		initial = num_items(Items.Pumpkin)
 		harvest()
-		harvest_count += 1
-		quick_print("收获次数: " + str(harvest_count))
+		gained = num_items(Items.Pumpkin) - initial
+		total_pumpkins = total_pumpkins + gained
+		harvest_count = harvest_count + 1
+		quick_print("第" + str(harvest_count) + "次收获: " + str(gained) + "个南瓜")
 		
 		# 并行重种
 		for _ in range(get_world_size()):
 			spawn_drone(plant_column)
 			move(East)
+
+quick_print("总产量: " + str(total_pumpkins))
+quick_print("总收获次数: " + str(harvest_count))

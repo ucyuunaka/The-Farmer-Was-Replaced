@@ -1,8 +1,11 @@
-clear()
+# 全尺寸-仙人掌排序
+
 s = get_world_size()
 
 for i in range(s):
 	for j in range(s):
+		if can_harvest():
+			harvest()
 		till()
 		plant(Entities.Cactus)
 		move(North)

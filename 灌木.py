@@ -2,6 +2,8 @@
 
 def plant_column():
 	for _ in range(get_world_size()):
+		if can_harvest():
+			harvest()
 		plant(Entities.Bush)
 		move(North)
 
@@ -9,7 +11,7 @@ def harvest_and_replant_column():
 	for _ in range(get_world_size()):
 		if can_harvest():
 			harvest()
-			plant(Entities.Bush)
+		plant(Entities.Bush)
 		move(North)
 
 for _ in range(get_world_size()):
