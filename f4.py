@@ -1,4 +1,4 @@
-# 全尺寸-施肥刷取奇异物质
+# 全尺寸-奇异物质
 for i in range(get_world_size()):
 	for j in range(get_world_size()):
 		plant(Entities.Bush)
