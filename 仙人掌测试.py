@@ -1,9 +1,8 @@
-# 全尺寸-仙人掌排序（多无人机版）
+# 全尺寸-仙人掌排序（充分优化版）
 
 clear()
 s = get_world_size()
 
-# 初始种植 - 多无人机并行
 def plant_column():
 	for _ in range(s):
 		till()
@@ -16,29 +15,39 @@ for _ in range(s):
 	move(East)
 
 while True:
-	# 排序阶段 - 保持单无人机
-	for round in range(s):
-		for i in range(s):
-			for j in range(s):
-				if get_pos_x() < s - 1:
-					c = measure()
-					e = measure(East)
-					if c != None and e != None and c > e:
-						swap(East)
-				move(North)
+	# 横向排序 - 按行并行（关键优化！）
+	def sort_row_east():
+		for _ in range(s):
+			if get_pos_x() < s - 1:
+				c = measure()
+				e = measure(East)
+				if c != None and e != None and c > e:
+					swap(East)
 			move(East)
 	
 	for round in range(s):
-		for i in range(s):
-			for j in range(s):
-				if get_pos_y() < s - 1:
-					c = measure()
-					n = measure(North)
-					if c != None and n != None and c > n:
-						swap(North)
-				move(North)
+		for _ in range(s):
+			if not spawn_drone(sort_row_east):
+				sort_row_east()
+			move(North)
+	
+	# 纵向排序 - 按列并行（关键优化！）
+	def sort_column_north():
+		for _ in range(s):
+			if get_pos_y() < s - 1:
+				c = measure()
+				n = measure(North)
+				if c != None and n != None and c > n:
+					swap(North)
+			move(North)
+	
+	for round in range(s):
+		for _ in range(s):
+			if not spawn_drone(sort_column_north):
+				sort_column_north()
 			move(East)
 	
+	# 等待成熟 - 保持简单
 	all_ready = False
 	while not all_ready:
 		all_ready = True
@@ -66,7 +75,7 @@ while True:
 	
 	gained = num_items(Items.Cactus) - before
 	min_chain = s * s * 6 // 10
-	min_yield = min_chain * min_chain
+	min_yield = min_chain * min_yield
 	
 	quick_print("Gained:", gained, "Target:", min_yield)
 	

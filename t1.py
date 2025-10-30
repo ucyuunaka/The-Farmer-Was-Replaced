@@ -1,7 +1,6 @@
 # t1.py - 修改版，记录产量
-if "world_size" in dir():
-	set_world_size(world_size)
-	
+set_world_size(8)  # 直接设置为8x8测试
+
 # 初始种植
 for _ in range(get_world_size()):
 	for _ in range(get_world_size()):

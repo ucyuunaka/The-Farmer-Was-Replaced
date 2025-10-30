@@ -1,7 +1,6 @@
-# t2.py - 修改版，记录产量
-if "world_size" in dir():
-	set_world_size(world_size)
-	
+# t2.py - 修正版
+set_world_size(8)
+
 def plant_column():
 	for _ in range(get_world_size()):
 		till()
@@ -14,7 +13,7 @@ def check_dead_column():
 			plant(Entities.Pumpkin)
 		move(North)
 
-# 初始种植
+# 初始种植（只保留这一段）
 for _ in range(get_world_size()):
 	spawn_drone(plant_column)
 	move(East)
@@ -24,7 +23,6 @@ max_runs = 10
 total_pumpkins = 0
 
 while harvest_count < max_runs:
-	# 并行检查枯萎
 	for _ in range(get_world_size()):
 		spawn_drone(check_dead_column)
 		move(East)
@@ -37,7 +35,6 @@ while harvest_count < max_runs:
 		harvest_count = harvest_count + 1
 		quick_print("第" + str(harvest_count) + "次收获: " + str(gained) + "个南瓜")
 		
-		# 并行重种
 		for _ in range(get_world_size()):
 			spawn_drone(plant_column)
 			move(East)
