@@ -30,4 +30,3 @@ while True:
 			direction_index = back_index
 	
 	harvest()
-	quick_print("黄金总数:", num_items(Items.Gold))

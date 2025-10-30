@@ -1,19 +1,19 @@
-# 全尺寸-胡萝卜
+# 全尺寸-南瓜
 
 def till_and_plant_column():
 	for _ in range(get_world_size()):
 		if get_ground_type() != Grounds.Soil:
 			till()
-		plant(Entities.Carrot)
+		plant(Entities.Pumpkin)
 		move(North)
 
 def harvest_and_replant_column():
 	for _ in range(get_world_size()):
 		if can_harvest():
 			harvest()
-			if get_ground_type() != Grounds.Soil:
-				till()
-			plant(Entities.Carrot)
+		if get_ground_type() != Grounds.Soil:
+			till()
+		plant(Entities.Pumpkin)
 		move(North)
 
 for _ in range(get_world_size()):
