@@ -8,6 +8,8 @@ def plant_column():
 	for _ in range(s):
 		till()
 		plant(Entities.Cactus)
+		if get_water() < 0.4:
+			use_item(Items.Water)
 		move(North)
 
 for _ in range(s):
@@ -79,6 +81,8 @@ while True:
 					harvest()
 				till()
 				plant(Entities.Cactus)
+				if get_water() < 0.4:
+					use_item(Items.Water)
 				move(North)
 		
 		for _ in range(s):
@@ -93,6 +97,10 @@ while True:
 				if get_entity_type() != Entities.Cactus:
 					till()
 					plant(Entities.Cactus)
+					if get_water() < 0.4:
+						use_item(Items.Water)
+				elif get_water() < 0.4:
+					use_item(Items.Water)
 				move(North)
 		
 		for _ in range(s):
