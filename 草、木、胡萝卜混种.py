@@ -1,4 +1,4 @@
-# 混合种植 - 草、胡萝卜、灌木
+# 混合种植 - 草、胡萝卜、灌木（带自动浇水）
 
 def process_column():
 	col = get_pos_x()
@@ -12,6 +12,9 @@ def process_column():
 			if get_ground_type() != Grounds.Soil:
 				till()
 			plant(Entities.Carrot)
+			# 检查胡萝卜地块含水量，低于0.5时浇水
+			if get_water() < 0.7:
+				use_item(Items.Water)
 		else:
 			plant(Entities.Bush)
 		move(North)
