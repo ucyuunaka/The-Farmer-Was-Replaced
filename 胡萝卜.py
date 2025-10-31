@@ -7,7 +7,7 @@ def till_and_plant_column():
 		if get_ground_type() != Grounds.Soil:
 			till()
 		plant(Entities.Carrot)
-		if get_water() < 0.7:
+		if get_water() < 0.5:
 			use_item(Items.Water)
 		move(North)
 
@@ -18,7 +18,7 @@ def harvest_and_replant_column():
 		if get_ground_type() != Grounds.Soil:
 			till()
 		plant(Entities.Carrot)
-		if get_water() < 0.7:
+		if get_water() < 0.5:
 			use_item(Items.Water)
 		move(North)
 
