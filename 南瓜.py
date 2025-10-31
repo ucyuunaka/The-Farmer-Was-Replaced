@@ -5,12 +5,16 @@ def plant_column():
 		if get_ground_type() != Grounds.Soil:
 			till()
 		plant(Entities.Pumpkin)
+		if get_water() < 0.7:
+			use_item(Items.Water)
 		move(North)
 
 def check_dead_column():
 	for _ in range(get_world_size()):
 		if get_entity_type() == Entities.Dead_Pumpkin:
 			plant(Entities.Pumpkin)
+			if get_water() < 0.7:
+				use_item(Items.Water)
 		move(North)
 
 # 初始种植
