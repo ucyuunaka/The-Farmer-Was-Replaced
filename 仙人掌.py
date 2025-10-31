@@ -3,6 +3,13 @@
 clear()
 s = get_world_size()
 
+# 循环浇水函数
+def water_column():
+	for _ in range(s):
+		if get_water() < 0.4:
+			use_item(Items.Water)
+		move(North)
+
 # 初始种植 - 多无人机并行
 def plant_column():
 	for _ in range(s):
@@ -18,6 +25,12 @@ for _ in range(s):
 	move(East)
 
 while True:
+	# 循环浇水 - 多无人机并行
+	for _ in range(s):
+		if not spawn_drone(water_column):
+			water_column()
+		move(East)
+	
 	# 排序阶段 - 保持单无人机
 	for round in range(s):
 		for i in range(s):
@@ -89,6 +102,12 @@ while True:
 			if not spawn_drone(replant_column):
 				replant_column()
 			move(East)
+		
+		# 收获后循环浇水
+		for _ in range(s):
+			if not spawn_drone(water_column):
+				water_column()
+			move(East)
 	else:
 		quick_print("Refilling gaps...")
 		
@@ -106,4 +125,10 @@ while True:
 		for _ in range(s):
 			if not spawn_drone(refill_column):
 				refill_column()
+			move(East)
+		
+		# 收获后循环浇水
+		for _ in range(s):
+			if not spawn_drone(water_column):
+				water_column()
 			move(East)
