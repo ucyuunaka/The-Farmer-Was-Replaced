@@ -1,43 +1,57 @@
-# 灌木效率比较测试 - 比较原始版本和优化版本的生产效率
+# 灌木种植优化版
+# 每架无人机负责间隔的多行，避免重叠并充分利用所有无人机
 
-# 测试参数
-test_time = 300  # 5分钟（秒）
-max_speedup = 64  # 最大加速倍率
-
-# 运行测试
-print("开始灌木效率比较测试...")
-print("测试时间: " + str(test_time) + "秒")
-print("加速倍率: " + str(max_speedup) + "倍")
-print("==================================================")
-
-# 测试原始版本
-print("测试原始版本...")
-original_time = simulate("f1", Unlocks, {Items.Water: 1000, Items.Fertilizer: 100}, {"test_time": test_time}, 0, max_speedup)
-print("原始版本运行时间: " + str(original_time) + "秒")
-
-# 测试优化版本
-print("\n测试优化版本...")
-optimized_time = simulate("f2", Unlocks, {Items.Water: 1000, Items.Fertilizer: 100}, {"test_time": test_time}, 0, max_speedup)
-print("优化版本运行时间: " + str(optimized_time) + "秒")
-
-# 比较结果
-print("\n" + "==================================================")
-print("效率比较结果:")
-
-if original_time > 0 and optimized_time > 0:
-	time_difference = original_time - optimized_time
-	time_ratio = optimized_time / original_time
+def work_on_assigned_rows():
+	total_drones = max_drones()
+	world_size = get_world_size()
+	start_row = get_pos_y()
 	
-	print("原始版本用时: " + str(round(original_time, 2)) + "秒")
-	print("优化版本用时: " + str(round(optimized_time, 2)) + "秒")
-	print("时间差: " + str(round(time_difference, 2)) + "秒")
-	print("时间比率: " + str(round(time_ratio, 2)))
+	while True:
+		row = start_row
+		
+		while row < world_size:
+			# 移动到目标行
+			while get_pos_y() != row:
+				if get_pos_y() < row:
+					move(North)
+				else:
+					move(South)
+			
+			# 移动到行首
+			while get_pos_x() > 0:
+				move(West)
+			
+			# 向右处理整行
+			for _ in range(world_size - 1):
+				if can_harvest():
+					harvest()
+				plant(Entities.Bush)
+				move(East)
+			
+			# 处理最后一格
+			if can_harvest():
+				harvest()
+			plant(Entities.Bush)
+			
+			# 移到下一个分配给此无人机的行
+			row = row + total_drones
+
+def main():
+	world_size = get_world_size()
+	num_drones = min(world_size, max_drones())
 	
-	if time_difference > 0:
-		improvement = (1 - time_ratio) * 100
-		print("优化版本比原始版本快 " + str(round(time_difference, 2)) + "秒 (" + str(round(improvement, 2)) + "%)")
-	else:
-		regression = (time_ratio - 1) * 100
-		print("原始版本比优化版本快 " + str(round(-time_difference, 2)) + "秒 (" + str(round(regression, 2)) + "%)")
-else:
-	print("无法比较，因为某个版本的运行时间为0")
+	# 为每行生成无人机（如果无人机数量足够）
+	# 或生成所有可用无人机，让它们分担所有行
+	for i in range(num_drones):
+		# 移动主无人机到第i行作为起始行
+		for _ in range(i):
+			move(North)
+		
+		# 在该位置生成工作无人机
+		spawn_drone(work_on_assigned_rows)
+		
+		# 主无人机返回原点继续生成下一个
+		for _ in range(i):
+			move(South)
+
+main()
